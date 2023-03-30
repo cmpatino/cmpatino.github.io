@@ -25,4 +25,4 @@ I'm mainly interested in building machine learning systems that can learn from h
 	src="https://gradio.s3-us-west-2.amazonaws.com/3.23.0/gradio.js"
 ></script>
 
-<gradio-app src="https://cmpatino-cv-assistant.hf.space"></gradio-app>
+<gradio-app src="https://cmpatino-cv-assistant-app.hf.space"></gradio-app>
