@@ -10,10 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>2022 | Carlos Miguel Patiño</title>
+    <title>Why is Numpy Faster than Pure Python? | Carlos Miguel Patiño</title>
     <meta name="author" content="Carlos Miguel Patiño">
-    <meta name="description" content="Carlos Miguel Patiño's personal website
-">
+    <meta name="description" content="TLDR; Numpy leverages contiguous memory allocation and vectorizes operations over entire arrays.">
 
 
     <!-- Bootstrap & MDB -->
@@ -33,7 +32,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%F0%9F%91%8B&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://cmpatino.github.io/blog/2022/">
+    <link rel="canonical" href="https://cmpatino.github.io/blog/2024/numpy-vs-python/">
     
     <!-- Dark Mode -->
     
@@ -71,6 +70,10 @@
                 <a class="nav-link" href="/">about</a>
               </li>
               
+              <!-- Blog -->
+              <li class="nav-item active">
+                <a class="nav-link" href="/blog/">blog<span class="sr-only">(current)</span></a>
+              </li>
 
               <!-- Other pages -->
               <li class="nav-item ">
@@ -100,35 +103,73 @@
 
     <!-- Content -->
     <div class="container mt-5">
-      <div class="post">
+      <!-- _layouts/post.html -->
+
+<div class="post">
 
   <header class="post-header">
-    <h1 class="post-title"> <i class="fas fa-calendar fa-sm"></i> 2022 </h1>
-    <p class="post-description"> an archive of posts from this year </p>
+    <h1 class="post-title">Why is Numpy Faster than Pure Python?</h1>
+    <p class="post-meta">February 2, 2024</p>
+    <p class="post-tags">
+      <a href="/blog/2024"> <i class="fas fa-calendar fa-sm"></i> 2024 </a>
+
+    </p>
   </header>
 
-  <article>
-    <div class="table-responsive">
-      <table class="table table-sm table-borderless">
-        
-        <tr>
-          <th scope="row">Dec 10, 2022</th>
-          <td>
-              <a class="post-link" href="/blog/2022/giscus-comments/">a post with giscus comments</a>
-          </td>
-        </tr>
-      
-        <tr>
-          <th scope="row">Feb 1, 2022</th>
-          <td>
-              <a class="post-link" href="/blog/2022/redirect/">a post with redirect</a>
-          </td>
-        </tr>
-      
-      </table>
-    </div>
-  </article>
+  <article class="post-content">
+    <p><strong>TLDR</strong>; Numpy leverages contiguous memory allocation and vectorizes operations over entire arrays.</p>
 
+<p>I’ve used Numpy since my early programming days in Python during my undergrad in physics. I was taught we should always use Numpy when dealing with numeric computations like matrix multiplication. I knew Numpy has optimized C implementations of some operations, but I wanted to dig deeper into what’s going on under the hood to make Numpy more efficient than pure Python for matrix-like structures. After all, Python also runs C in the background.</p>
+
+<p>I found good answers in the <a href="https://www.oreilly.com/library/view/high-performance-python/9781492055013/" rel="external nofollow noopener" target="_blank">High Performance Python book</a>, which I decided to summarize in this post.</p>
+
+<h2 id="vectorization">Vectorization</h2>
+
+<p>Let’s assume for a moment that we can have all the data we need to run an operation on the CPU. Vectorization is a process where you apply the same operation simultaneously to multiple elements. For example, you can multiply parts of arrays at once instead of multiplying element by element.</p>
+
+<p>The caveat of vectorized operations is that they run on a different part of the CPU and with different instructions than non-vectorized operations. Python doesn’t leverage vectorized operations that are possible in the CPU, so Numpy has specialized code that takes advantage of the vectorizations enabled by the CPU. That’s why vectorization is one of the reasons Numpy is faster than pure Python.</p>
+
+<h2 id="fragmented-vs-contiguous-memory">Fragmented vs. Contiguous Memory</h2>
+
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
+
+  <picture>
+    
+    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/numpy_vs_python-480.webp"></source>
+    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/numpy_vs_python-800.webp"></source>
+    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/numpy_vs_python-1400.webp"></source>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/numpy_vs_python.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+<div class="caption">
+    Fragmented memory results in irrelevant data (green squares) in each memory transfer, so we need more memory transfers to pass the relevant data (blue squares) to the CPU cache.
+</div>
+
+<p>Fragmented memory results in irrelevant data (green squares) in each memory transfer, so we need more memory transfers to pass the relevant data (blue squares) to the CPU cache.</p>
+
+<p>We now know that vectorization requires all the data in the CPU. However, CPUs have limited memory, so we need to figure out how to transfer data between the RAM and the CPU’s cache.</p>
+
+<p>Python lists and Numpy arrays handle data differently. Python lists store pointers to the data; meaning lists don’t hold the data we care about. Storing pointers of the data allows Python to hold multiple types of data in a list, resulting in our relevant data being fragmented in different memory locations. This fragmentation is fine for most cases, but a potential optimization becomes clear when we understand communications between the RAM and the CPU.</p>
+
+<p>The data we use is initially stored in RAM and then moved to the CPU when we need to run calculations with that data. Communication between the two devices is costly in terms of time, so CPUs have a cache memory where they can store data they know they will require to run the calculations we request. That’s why the CPU tries to predict which data will be required and tries to transfer that data to its cache. The CPU usually makes this prediction well (using techniques like branch prediction and pipelining), so the real bottleneck is moving data quickly between the RAM and the CPU cache.</p>
+
+<p>Transferring between the RAM and the CPU cache—also known as the L1/L2 cache—is done by a bus that transfers memory in blocks. We usually want to run an operation over the entire object for data structures like matrices, so we know that, eventually, we want to transfer all the elements in the matrix to the CPU. If the data we want to use is fragmented across our RAM, the transferred blocks will contain pieces that are not relevant to our calculation. If our data is stored in contiguous blocks, most of our data will be relevant to the calculation. That’s why we need fewer transfer operations than in the fragmented memory case. Using contiguous memory gets our relevant data to the CPU faster, and this optimization results in faster runtimes. You can see a comparison of the two cases in the diagram below.</p>
+
+<h2 id="takeaways">Takeaways</h2>
+
+<p>Python is a very flexible language, but that flexibility often comes with a price we pay in performance. In our case, Python allows having lists containing elements of different types, which are challenging to store in contiguous memory without causing issues. Numpy then enforces elements in an array to be the same type to speed up calculations by reducing data transfers and leveraging vectorization. That limitation of having arrays of the same data type can be limiting for some use cases but isn’t a problem for numeric computing. That’s why Numpy works great for handling operations between numerical tensors and is faster than pure Python for those cases.</p>
+
+  </article>
 </div>
 
     </div>
@@ -137,7 +178,7 @@
     <!--    
     <footer class="fixed-bottom">
       <div class="container mt-0">
-        &copy; Copyright 2023 Carlos Miguel Patiño. 
+        &copy; Copyright 2024 Carlos Miguel Patiño. 
       </div>
     </footer> -->
 
@@ -175,7 +216,14 @@
   <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js"></script>
   <script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 
-    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NPQGE9ZT5F"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ window.dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-NPQGE9ZT5F');
+  </script>
     
 
 <!-- Scrolling Progress Bar -->
