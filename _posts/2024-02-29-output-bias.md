@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  Initializing the Bias in Output Layers
-date: 2024-02-29 11:00:00
+date: 2024-02-27 11:00:00
 description: Should you initialize the bias in the output layer to predict the positive rate?
 tags: 
 categories: 
