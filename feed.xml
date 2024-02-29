@@ -1,5 +1,126 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://cmpatino.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://cmpatino.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-02-27T04:00:06+00:00</updated><id>https://cmpatino.github.io/feed.xml</id><title type="html">blank</title><subtitle>Carlos Miguel Patiño&apos;s personal website
-</subtitle><entry><title type="html">Why is Numpy Faster than Pure Python?</title><link href="https://cmpatino.github.io/blog/2024/numpy-vs-python/" rel="alternate" type="text/html" title="Why is Numpy Faster than Pure Python?" /><published>2024-02-02T08:20:00+00:00</published><updated>2024-02-02T08:20:00+00:00</updated><id>https://cmpatino.github.io/blog/2024/numpy-vs-python</id><content type="html" xml:base="https://cmpatino.github.io/blog/2024/numpy-vs-python/"><![CDATA[<p><strong>TLDR</strong>; Numpy leverages contiguous memory allocation and vectorizes operations over entire arrays.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://cmpatino.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://cmpatino.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2024-02-29T22:03:48+00:00</updated><id>https://cmpatino.github.io/feed.xml</id><title type="html">blank</title><subtitle>Carlos Miguel Patiño&apos;s personal website
+</subtitle><entry><title type="html">Initializing the Bias in Output Layers</title><link href="https://cmpatino.github.io/blog/2024/output-bias/" rel="alternate" type="text/html" title="Initializing the Bias in Output Layers" /><published>2024-02-29T11:00:00+00:00</published><updated>2024-02-29T11:00:00+00:00</updated><id>https://cmpatino.github.io/blog/2024/output-bias</id><content type="html" xml:base="https://cmpatino.github.io/blog/2024/output-bias/"><![CDATA[<p>One of Andrej Karpathy’s recommendations in his famous <a href="https://karpathy.github.io/2019/04/25/recipe/">A Recipe for Training Neural Networks</a> is to “initialize well.”</p>
+
+<blockquote>
+  <p>If you have an imbalanced dataset of a ratio 1:10 of positives:negatives, set the bias on your logits such that your network predicts probability of 0.1 at initialization. Setting these correctly will speed up convergence and eliminate “hockey stick” loss curves where in the first few iteration your network is basically just learning the bias.</p>
+</blockquote>
+
+<p>I have used his advice to initialize my binary classifiers and, so far, have achieved good results. However, I never stopped to test whether initializing the bias with that recommendation helped model performance significantly. This post aims to answer that question with a quick experiment.</p>
+
+<h2 id="the-setup">The Setup</h2>
+
+<ul>
+  <li>
+    <p><strong>Dataset</strong>: We are going to use the <a href="https://www.cs.toronto.edu/~kriz/cifar.html">CIFAR10 dataset</a> with a twist. The twist is that we want to benchmark the bias initialization in a binary task, but CIFAR10 has ten classes. We will follow the <a href="https://www.youtube.com/watch?v=tWwCK95X6go">Hot Dog-Not Hot Dog</a> approach to turn the task into a binary classification problem. We don’t have hot dogs in CIFAR10, so we will train a model that classifies Frog-Not Frog.</p>
+  </li>
+  <li>
+    <p><strong>Model</strong>: We used <a href="https://pytorch.org/vision/stable/models/generated/torchvision.models.efficientnet_b1.html#torchvision.models.EfficientNet_B1_Weights">EfficientNet B1</a> with ~7.8M parameters available in torchvision. This model strikes a good balance between speed and performance: it is small enough to run multiple experiments quickly but performs well, as measured by its acc@1 of 79.838 on ImageNet. We ran experiments with and without pre-trained ImageNet weights to check whether the pre-training impacted our results.</p>
+  </li>
+  <li>
+    <p><strong>Training</strong>: We trained each model for five epochs and repeated each training process ten times to account for randomness in initialization and training. The optimizer is the vanilla SGD with a learning rate of 0.0001. You can see all the training details in this <a href="https://github.com/cmpatino/substack/blob/main/output_bias_init/main.py">GitHub link</a>.</p>
+  </li>
+  <li>
+    <p><strong>Hardware</strong>: We ran the experiments in a T4 GPU, which is right for this experiment because the model and the data aren’t too large. Training the two models ten times each costs less than USD 10 on a single T4. I ran everything using <a href="https://lightning.ai/studios">Lightning Studios</a>, which has proven great for quickly spinning up instances with GPUs and running experiments.</p>
+  </li>
+</ul>
+
+<h2 id="results">Results</h2>
+
+<h5 id="imagenet-weights">ImageNet Weights</h5>
+
+<p>The first experiment was to train the model using the pre-trained ImageNet weights. The learning curve at epoch 0 shows how initializing the model at the positive class rate starts with a lower loss before training the model. However, the model with the vanilla initialization quickly closes the gap, and both models have identical performance by the 5th training epoch.</p>
+
+<p>Despite both models achieving nearly identical performance after a few epochs, the positive rate initialization avoids the hockey stick shape in the learning curve. This head start in the loss may be crucial for larger datasets or models you can’t afford to train for multiple epochs.</p>
+
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
+
+  <picture>
+    
+    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/output_bias/results_pretrained-480.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/output_bias/results_pretrained-800.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/output_bias/results_pretrained-1400.webp" />
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/output_bias/results_pretrained.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+<div class="caption">
+    Results for a model initialized with pre-trained ImageNet weights.
+</div>
+
+<h5 id="trained-without-imagenet-weights">Trained without ImageNet Weights</h5>
+
+<p>The second experiment was to train the model without the pre-trained ImageNet weights. The first—perhaps expected—conclusion is that we have a harder time training the model without the ImageNet weights. Both initializations achieved less than 0.9 ROC-AUC in the fifth epoch, while the model with ImageNet weights was already close to perfect ROC-AUC at that point in training.</p>
+
+<p>As before, the positive rate initialization has a head start from the model initialized with the vanilla output bias. If we focus on the ROC-AUC learning curve, the red curve has a harder time catching up with the blue curve up to the third epoch. This indicates that the advantage given by the positive rate initialization is more valuable in the case of models without pre-trained weights.</p>
+
+<p>What’s interesting about the plot below is how the vanilla initialization model surpasses the positive rate initialization model. None of the two models have converged, but you would benefit from choosing the vanilla initialization if your FLOPs budget only allowed for training five epochs.</p>
+
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
+
+  <picture>
+    
+    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/output_bias/results-480.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/output_bias/results-800.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/output_bias/results-1400.webp" />
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/output_bias/results.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+<div class="caption">
+    Fragmented memory results in irrelevant data (green squares) in each memory transfer, so we need more memory transfers to pass the relevant data (blue squares) to the CPU cache.
+</div>
+
+<p>To compare the model with the pre-trained weights, we trained both models without the ImageNet weights until they converged. The plots below are just from training the models twice instead of ten as from the previous two plots.</p>
+
+<p>The conclusion is the same as with the ImageNet weights: both models achieve similar metrics if we can afford to train them to convergence.</p>
+
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
+
+  <picture>
+    
+    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/output_bias/results_20epochs-480.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/output_bias/results_20epochs-800.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/output_bias/results_20epochs-1400.webp" />
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/output_bias/results_20epochs.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+<div class="caption">
+    Models initialized with pre-trained weights and trained until convergence.
+</div>
+
+<h2 id="takeaways">Takeaways</h2>
+
+<p>Initializing the bias in the model’s output layer with the positive class rate, as Karpathy mentions in his guide, avoids the hockey stick shape in the learning curve. This head start proves useful when your FLOPs budget can only afford a few training epochs. However, the model initialized with the vanilla method closes the gap quickly for the pre-trained model and after a few epochs for the model trained from scratch.</p>
+
+<p>Also, always use pre-trained weights when possible! The strongest conclusion from this set of runs is that models with pre-trained weights converge significantly faster than models trained from scratch.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Should you initialize the bias in the output layer to predict the positive rate?]]></summary></entry><entry><title type="html">Why is Numpy Faster than Pure Python?</title><link href="https://cmpatino.github.io/blog/2024/numpy-vs-python/" rel="alternate" type="text/html" title="Why is Numpy Faster than Pure Python?" /><published>2024-02-02T08:20:00+00:00</published><updated>2024-02-02T08:20:00+00:00</updated><id>https://cmpatino.github.io/blog/2024/numpy-vs-python</id><content type="html" xml:base="https://cmpatino.github.io/blog/2024/numpy-vs-python/"><![CDATA[<p><strong>TLDR</strong>; Numpy leverages contiguous memory allocation and vectorizes operations over entire arrays.</p>
 
 <p>I’ve used Numpy since my early programming days in Python during my undergrad in physics. I was taught we should always use Numpy when dealing with numeric computations like matrix multiplication. I knew Numpy has optimized C implementations of some operations, but I wanted to dig deeper into what’s going on under the hood to make Numpy more efficient than pure Python for matrix-like structures. After all, Python also runs C in the background.</p>
 
