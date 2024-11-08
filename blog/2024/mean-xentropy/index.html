@@ -148,7 +148,7 @@
 
 <p>My first instinct was to implement the model in PyTorch and check layer by layer to see if I was getting the same result as my Numpy implementation. This wasn’t fun. I had to initialize the numpy and PyTorch networks to the same values and make the layer values reproducible. After hours of checking tensors and arrays of outputs and gradients, I convinced myself that the layer implementations had identical results.</p>
 
-<p>Could it be something with the initialization? I was getting warnings about potential overflows and wondered if my implementation of the Kaiming initialization was causing large values and exploding the values and gradients of the network. I tried multiple initialization methods and I was still getting the same curve.</p>
+<p>Could it be something with the initialization? I was getting warnings about potential overflows and wondered if my implementation of the Kaiming initialization was causing large values and exploding the values and gradients of the network. I tried multiple initialization methods and was still getting the same curve.</p>
 
 <p>It was getting dark outside, so I returned to the pipeline I had replicated in PyTorch and began reading the parameters of each of the layers. I had defaulted to using the sum reduction for the cross-entropy</p>
 
