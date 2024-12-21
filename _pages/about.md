@@ -7,7 +7,7 @@ subtitle: MSc in Artificial Intelligence @ University of Amsterdam
 profile:
   align: center
   image: prof_pic.jpg
-  image_cicular: false # crops the image to make it circular
+  image_cicular: true # crops the image to make it circular
   address: >
     
 
