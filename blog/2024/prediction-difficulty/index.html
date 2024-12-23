@@ -10,10 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>2024 | Carlos Miguel Patiño</title>
+    <title>Quantifying Prediction Difficulty | Carlos Miguel Patiño</title>
     <meta name="author" content="Carlos Miguel Patiño">
-    <meta name="description" content="Carlos Miguel Patiño's personal website
-">
+    <meta name="description" content="How can we tell if an example is difficult for a model?">
 
 
     <!-- Bootstrap & MDB -->
@@ -33,7 +32,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%F0%9F%91%8B&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://cmpatino.github.io/blog/2024/">
+    <link rel="canonical" href="https://cmpatino.github.io/blog/2024/prediction-difficulty/">
     
     <!-- Dark Mode -->
     
@@ -104,49 +103,100 @@
 
     <!-- Content -->
     <div class="container mt-5">
-      <div class="post">
+      <!-- _layouts/post.html -->
+
+<div class="post">
 
   <header class="post-header">
-    <h1 class="post-title"> <i class="fas fa-calendar fa-sm"></i> 2024 </h1>
-    <p class="post-description"> an archive of posts from this year </p>
+    <h1 class="post-title">Quantifying Prediction Difficulty</h1>
+    <p class="post-meta">December 22, 2024</p>
+    <p class="post-tags">
+      <a href="/blog/2024"> <i class="fas fa-calendar fa-sm"></i> 2024 </a>
+
+    </p>
   </header>
 
-  <article>
-    <div class="table-responsive">
-      <table class="table table-sm table-borderless">
-        
-        <tr>
-          <th scope="row">Dec 22, 2024</th>
-          <td>
-              <a class="post-link" href="/blog/2024/prediction-difficulty/">Quantifying Prediction Difficulty</a>
-          </td>
-        </tr>
-      
-        <tr>
-          <th scope="row">Nov 6, 2024</th>
-          <td>
-              <a class="post-link" href="/blog/2024/mean-xentropy/">Mean vs. Total Cross-Entropy Loss</a>
-          </td>
-        </tr>
-      
-        <tr>
-          <th scope="row">Feb 29, 2024</th>
-          <td>
-              <a class="post-link" href="/blog/2024/output-bias/">Initializing the Bias in Output Layers</a>
-          </td>
-        </tr>
-      
-        <tr>
-          <th scope="row">Feb 2, 2024</th>
-          <td>
-              <a class="post-link" href="/blog/2024/numpy-vs-python/">Why is Numpy Faster than Pure Python?</a>
-          </td>
-        </tr>
-      
-      </table>
-    </div>
-  </article>
+  <article class="post-content">
+    <p>I’ve been working on uncertainty quantification for deep learning models. Most recently, I collaborated on the paper <a href="https://arxiv.org/abs/2410.01767" rel="external nofollow noopener" target="_blank">Decision-Focused Uncertainty Quantification</a>, where we explored ways to extend the standard conformal prediction method to generate more useful prediction sets for decision-makers.</p>
 
+<p>As part of the project, we needed to quantify the difficulty of classifying an image using a specific model and connect that difficulty to the set size that resulted from conformal prediction. More specifically, we wanted to prove that difficult images resulted in larger predicted sets. This post discusses the two methods we considered for measuring prediction difficulty and why we chose one over the other.</p>
+
+<h2 id="entropy-of-the-softmax-distribution">Entropy of the Softmax Distribution</h2>
+
+<p>The intuition behind this method is to leverage the shape of the softmax distribution to determine the certainty of the model’s prediction. If the model is sure about its prediction, the output softmax distribution will have a dominant class with a score of around 0.99, while the other classes will have tiny scores. If the model is unsure which class to assign the image to, the softmax distribution will be mostly flat—i.e., all images will have roughly the same score.</p>
+
+<p>As a former physicist, I can’t help but think of the entropy as a measurement of the flatness of the softmax distribution. We are going to use Shannon’s entropy in the context of information theory, which is given by</p>
+
+\[H = -\sum_{i=1}^{n} p_k \log(p_k)\]
+
+<p>The entropy of the softmax distribution will be large if we have a flat distribution because it’s the state of largest uncertainty. In that case, the flat distribution resembles a uniform distribution where we really don’t know which class we should assign to the image.</p>
+
+<p>In contrast, the entropy of the softmax output will be small if we have a peak in one of the classes. Intuitively, this will be where we have less uncertainty about our prediction. Mathematically, we can use the entropy equation to analyze why the entropy will be small. The class that has the peak \(p_k \sim 1\) and \(\log(p_k) \sim 0\). For all the other classes, \(p_k \sim 0\). That means all the terms on the sum in the entropy equation will be small.</p>
+
+<p>We can verify this with a toy example where we vary the score of one of the classes and distribute the remaining density across the other classes. The snippet below does exactly that and produces the plot we expect.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">np</span>
+
+<span class="kn">from</span> <span class="n">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
+
+<span class="n">true_class_scores</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">n_classes</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">entropies</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">true_class_score</span> <span class="ow">in</span> <span class="n">true_class_scores</span><span class="p">:</span>
+    <span class="n">extra_class_score</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">true_class_score</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">n_classes</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">extra_classes</span> <span class="o">=</span> <span class="p">[</span><span class="n">extra_class_score</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_classes</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">softmax_output</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">array</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">true_class_score</span><span class="p">]</span> <span class="o">+</span> <span class="n">extra_classes</span>
+    <span class="p">)</span>
+    <span class="n">entropies</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">stats</span><span class="p">.</span><span class="nf">entropy</span><span class="p">(</span><span class="n">softmax_output</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
+
+  <picture>
+    
+    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/entropy_vs_flatness-480.webp"></source>
+    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/entropy_vs_flatness-800.webp"></source>
+    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/entropy_vs_flatness-1400.webp"></source>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/entropy_vs_flatness.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+<div class="caption">
+    Plot showing how the entropy decrease as we have a higher score for the true class.
+</div>
+
+<h2 id="score-of-the-true-class">Score of the True Class</h2>
+
+<p>This is a short description because the method is pretty simple. Another way to quantify the difficulty of an image for a model is to quantify the model’s expected accuracy. This calculation is easier because we can just use the true label’s softmax score to measure the model’s expected accuracy for a specific image. The score will not be perfectly calibrated to a probability, but it will be good enough to measure difficulty. If the softmax score is small for the true class, the probability of the model being right for that image is also small.</p>
+
+<h2 id="the-verdict">The Verdict</h2>
+
+<p>We ended up using the score of the true class for the following reasons related to how conformal prediction impacts the predicted set:</p>
+
+<ol>
+  <li>
+    <p>Conformal prediction, by definition, will output a larger set if the distribution is flatter because we need more classes to reach the conformal score threshold. That means the “flatness” of the distribution is not a good metric because the relationship between difficulty and set size is pre-defined—i.e., we can’t have difficult examples with small sets.</p>
+  </li>
+  <li>
+    <p>The score of the true class ignores the score of the other classes. If the true class has a low score, it doesn’t necessarily mean the set will be large because other classes may have large scores that reach the threshold with just a few classes. In other words, we could have a small set size and a model that assigns a high score to the wrong class. That means the example is difficult to classify because it confuses the model and has a small set size. Since our objective was to prove that our method had large sets for difficult images, this difficulty definition was perfect for us.</p>
+  </li>
+</ol>
+
+<p>I really enjoyed thinking about this problem because both methods are good ways to quantify the model’s uncertainty. However, in conformal prediction, we have a clear winner when determining the effect of prediction difficulty on the set size.</p>
+
+  </article>
 </div>
 
     </div>
