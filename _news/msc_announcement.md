@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-I started my MSc in Artificial Intelligence at the University of Amsterdam in September 2023.
+I started my MSc in Artificial Intelligence at the University of Amsterdam in September 2024.
