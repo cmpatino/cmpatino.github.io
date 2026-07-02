@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://cmpatino.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://cmpatino.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-07-02T09:04:50+00:00</updated><id>https://cmpatino.github.io/feed.xml</id><title type="html">blank</title><subtitle>Carlos Miguel Patiño&apos;s personal website
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://cmpatino.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://cmpatino.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-07-02T10:47:06+00:00</updated><id>https://cmpatino.github.io/feed.xml</id><title type="html">blank</title><subtitle>Carlos Miguel Patiño&apos;s personal website
 </subtitle><entry><title type="html">The Gemma Challenge and the Case for Agent Collabs</title><link href="https://cmpatino.github.io/blog/2026/gemma-collab-lessons/" rel="alternate" type="text/html" title="The Gemma Challenge and the Case for Agent Collabs" /><published>2026-06-23T11:04:48+00:00</published><updated>2026-06-23T11:04:48+00:00</updated><id>https://cmpatino.github.io/blog/2026/gemma-collab-lessons</id><content type="html" xml:base="https://cmpatino.github.io/blog/2026/gemma-collab-lessons/"><![CDATA[<p>This post is hosted externally. If you are not redirected automatically, please visit the link below:</p>
 
 <p>https://huggingface.co/spaces/agent-collaborations/gemma-collab-lessons</p>]]></content><author><name></name></author><category term="agents" /><category term="collaboration" /><category term="gemma" /><summary type="html"><![CDATA[Running an open agent collaboration to speed up Gemma 4.]]></summary></entry><entry><title type="html">Distilling 100B+ Models 40x Faster with TRL</title><link href="https://cmpatino.github.io/blog/2026/trl-distillation-trainer/" rel="alternate" type="text/html" title="Distilling 100B+ Models 40x Faster with TRL" /><published>2026-04-09T10:27:10+00:00</published><updated>2026-04-09T10:27:10+00:00</updated><id>https://cmpatino.github.io/blog/2026/trl-distillation-trainer</id><content type="html" xml:base="https://cmpatino.github.io/blog/2026/trl-distillation-trainer/"><![CDATA[<p>This post is hosted externally. If you are not redirected automatically, please visit the link below:</p>
@@ -44,19 +44,7 @@
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
         <figure>
-
-  <picture>
-    
-    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/entropy_vs_flatness-480.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/entropy_vs_flatness-800.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/entropy_vs_flatness-1400.webp" />
-    
-
-    <!-- Fallback to the original file -->
-    <img src="/assets/img/entropy_vs_flatness.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
-
-  </picture>
-
+  <img src="/assets/img/entropy_vs_flatness.webp" class="img-fluid rounded shadow-sm" loading="lazy" decoding="async" />
 </figure>
 
     </div>
@@ -91,19 +79,7 @@
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
         <figure>
-
-  <picture>
-    
-    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/training_plot_bad-480.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/training_plot_bad-800.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/training_plot_bad-1400.webp" />
-    
-
-    <!-- Fallback to the original file -->
-    <img src="/assets/img/training_plot_bad.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
-
-  </picture>
-
+  <img src="/assets/img/training_plot_bad.webp" class="img-fluid rounded shadow-sm" loading="lazy" decoding="async" />
 </figure>
 
     </div>
@@ -130,19 +106,7 @@
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
         <figure>
-
-  <picture>
-    
-    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/training_plot_good-480.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/training_plot_good-800.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/training_plot_good-1400.webp" />
-    
-
-    <!-- Fallback to the original file -->
-    <img src="/assets/img/training_plot_good.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
-
-  </picture>
-
+  <img src="/assets/img/training_plot_good.webp" class="img-fluid rounded shadow-sm" loading="lazy" decoding="async" />
 </figure>
 
     </div>
@@ -204,19 +168,7 @@
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
         <figure>
-
-  <picture>
-    
-    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/output_bias/results_pretrained-480.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/output_bias/results_pretrained-800.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/output_bias/results_pretrained-1400.webp" />
-    
-
-    <!-- Fallback to the original file -->
-    <img src="/assets/img/output_bias/results_pretrained.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
-
-  </picture>
-
+  <img src="/assets/img/output_bias/results_pretrained.webp" class="img-fluid rounded shadow-sm" loading="lazy" decoding="async" />
 </figure>
 
     </div>
@@ -236,19 +188,7 @@
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
         <figure>
-
-  <picture>
-    
-    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/output_bias/results-480.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/output_bias/results-800.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/output_bias/results-1400.webp" />
-    
-
-    <!-- Fallback to the original file -->
-    <img src="/assets/img/output_bias/results.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
-
-  </picture>
-
+  <img src="/assets/img/output_bias/results.webp" class="img-fluid rounded shadow-sm" loading="lazy" decoding="async" />
 </figure>
 
     </div>
@@ -264,19 +204,7 @@
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
         <figure>
-
-  <picture>
-    
-    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/output_bias/results_20epochs-480.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/output_bias/results_20epochs-800.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/output_bias/results_20epochs-1400.webp" />
-    
-
-    <!-- Fallback to the original file -->
-    <img src="/assets/img/output_bias/results_20epochs.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
-
-  </picture>
-
+  <img src="/assets/img/output_bias/results_20epochs.webp" class="img-fluid rounded shadow-sm" loading="lazy" decoding="async" />
 </figure>
 
     </div>
@@ -306,19 +234,7 @@
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
         <figure>
-
-  <picture>
-    
-    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/numpy_vs_python-480.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/numpy_vs_python-800.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/numpy_vs_python-1400.webp" />
-    
-
-    <!-- Fallback to the original file -->
-    <img src="/assets/img/numpy_vs_python.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
-
-  </picture>
-
+  <img src="/assets/img/numpy_vs_python.webp" class="img-fluid rounded shadow-sm" loading="lazy" decoding="async" />
 </figure>
 
     </div>
