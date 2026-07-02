@@ -285,17 +285,6 @@ blockquote {
   }
 }
 
-#light-toggle {
-  padding: 0;
-  border: 0;
-  background-color: inherit;
-  color: var(--global-text-color);
-
-  &:hover {
-    color: var(--global-hover-color);
-  }
-}
-
 // Social (bottom)
 
 .social {
@@ -350,35 +339,6 @@ footer.sticky-bottom {
   padding-top: 40px;
   padding-bottom: 40px;
   font-size: 0.9rem;
-}
-
-// CV
-
-.cv {
-  margin-bottom: 40px;
-
-  .card {
-    background-color: var(--global-card-bg-color);
-    border: 1px solid var(--global-divider-color);
-
-    .list-group-item {
-      background-color: inherit;
-      border-color: var(--global-divider-color);
-
-      .badge {
-        color: var(--global-card-bg-color) !important;
-        background-color: var(--global-theme-color) !important;
-      }
-    }
-  }
-}
-
-// Repositories
-
-@media (min-width: 768px) {
-  .repo {
-    max-width: 50%;
-  }
 }
 
 // Blog
@@ -467,62 +427,6 @@ footer.sticky-bottom {
         background-color: var(--global-theme-color);
       }
     }
-  }
-}
-
-
-// Distill
-
-.distill {
-  a:hover {
-    border-bottom-color: var(--global-theme-color);
-    text-decoration: none;
-  }
-}
-
-
-// Projects
-
-.projects {
-  a {
-    text-decoration: none;
-
-    &:hover {
-      .card-title {
-        color: var(--global-theme-color);
-      }
-    }
-  }
-
-  .card {
-    img {
-      width: 100%;
-    }
-  }
-
-  .card-item {
-    width: auto;
-    margin-bottom: 10px;
-
-    .row {
-      display: flex;
-      align-items: center;
-    }
-  }
-
-  .grid-sizer,
-  .grid-item {
-    width: 250px;
-    margin-bottom: 10px;
-  }
-
-  h2.category {
-    color: var(--global-divider-color);
-    border-bottom: 1px solid var(--global-divider-color);
-    padding-top: 0.5rem;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    text-align: right;
   }
 }
 
@@ -639,20 +543,6 @@ footer.sticky-bottom {
           &:hover {
             color: var(--global-theme-color);
             border-color: var(--global-theme-color);
-          }
-        }
-      }
-
-      .badges {
-        span {
-          display: inline-block;
-          color: $black-color;
-          height: 100%;
-          padding-left: 0.5rem;
-          vertical-align: middle;
-
-          &:hover {
-            text-decoration: underline;
           }
         }
       }

@@ -18,15 +18,16 @@ layout: default
               {%- assign profile_image_path = page.profile.image | prepend: 'assets/img/' -%}
 
               {% if page.profile.image_circular %}
-                {%- assign profile_image_class = "img-fluid z-depth-1 rounded-circle" -%}
+                {%- assign profile_image_class = "img-fluid shadow-sm rounded-circle" -%}
               {% else %}
-                {%- assign profile_image_class = "img-fluid z-depth-1 rounded" -%}
+                {%- assign profile_image_class = "img-fluid shadow-sm rounded" -%}
               {% endif %}
 
               {% include figure.html 
               path=profile_image_path 
               class=profile_image_class
-              alt=page.profile.image -%}
+              alt=page.profile.image
+              loading="eager" -%}
             {% endif -%}
             {%- if page.profile.address %}
             <div class="address">
@@ -39,18 +40,6 @@ layout: default
           <div class="clearfix">
             {{ content }}
           </div>
-
-          <!-- News -->
-          {% if page.news -%}
-            <h2><a href="{{ '/news/' | relative_url }}" style="color: inherit;">news</a></h2>
-            {%- include news.html %}
-          {%- endif %}
-
-          <!-- Selected papers -->
-          {% if page.selected_papers -%}
-            <h2><a href="{{ '/publications/' | relative_url }}" style="color: inherit;">selected publications</a></h2>
-            {%- include selected_papers.html %}
-          {%- endif %}
 
           <!-- Social -->
           {%- if page.social %}

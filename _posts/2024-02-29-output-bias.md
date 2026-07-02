@@ -33,7 +33,7 @@ Despite both models achieving nearly identical performance after a few epochs, t
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/output_bias/results_pretrained.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/output_bias/results_pretrained.webp" class="img-fluid rounded shadow-sm" %}
     </div>
 </div>
 <div class="caption">
@@ -50,7 +50,7 @@ What’s interesting about the plot below is how the vanilla initialization mode
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/output_bias/results.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/output_bias/results.webp" class="img-fluid rounded shadow-sm" %}
     </div>
 </div>
 <div class="caption">
@@ -63,7 +63,7 @@ The conclusion is the same as with the ImageNet weights: both models achieve sim
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/output_bias/results_20epochs.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/output_bias/results_20epochs.webp" class="img-fluid rounded shadow-sm" %}
     </div>
 </div>
 <div class="caption">

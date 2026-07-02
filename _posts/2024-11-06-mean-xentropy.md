@@ -15,7 +15,7 @@ Fortunately, the training loop ran quickly and got the first results in a few mi
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/training_plot_bad.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/training_plot_bad.webp" class="img-fluid rounded shadow-sm" %}
     </div>
 </div>
 
@@ -41,7 +41,7 @@ I realized I was using a parameter different from PyTorch’s default. Changing 
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/training_plot_good.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/training_plot_good.webp" class="img-fluid rounded shadow-sm" %}
     </div>
 </div>
 

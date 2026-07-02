@@ -5,6 +5,7 @@ date: 2024-12-22 15:30:00
 description: How can we tell if an example is difficult for a model?
 tags: 
 categories: 
+math: true
 ---
 
 I’ve been working on uncertainty quantification for deep learning models. Most recently, I collaborated on the paper [Decision-Focused Uncertainty Quantification](https://arxiv.org/abs/2410.01767), where we explored ways to extend the standard conformal prediction method to generate more useful prediction sets for decision-makers.
@@ -48,7 +49,7 @@ for true_class_score in true_class_scores:
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/entropy_vs_flatness.png" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/entropy_vs_flatness.webp" class="img-fluid rounded shadow-sm" %}
     </div>
 </div>
 <div class="caption">
