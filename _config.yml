@@ -26,6 +26,7 @@ impressum_path:  # set to path to include impressum link in the footer, use the 
 # -----------------------------------------------------------------------------
 
 highlight_theme_light: github
+highlight_theme_dark: native
 
 # -----------------------------------------------------------------------------
 # RSS Feed
@@ -208,6 +209,7 @@ enable_panelbear_analytics: false  # enables panelbear analytics
 enable_google_verification: false  # enables google site verification
 enable_bing_verification:   false  # enables bing site verification
 enable_math:                true   # page-level MathJax; set `math: true` in front matter
+enable_darkmode:            true   # enables switching between light/dark modes
 enable_navbar_social:       false
 
 # -----------------------------------------------------------------------------
@@ -230,3 +232,8 @@ jquery:
   integrity: "sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
 mathjax:
   version: "3.2.0"
+mdb:
+  version: "4.20.0"
+  integrity:
+    css: "sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw="
+    js: "sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA="

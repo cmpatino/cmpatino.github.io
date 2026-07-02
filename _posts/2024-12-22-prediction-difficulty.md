@@ -49,7 +49,7 @@ for true_class_score in true_class_scores:
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/entropy_vs_flatness.webp" class="img-fluid rounded shadow-sm" %}
+        {% include figure.html path="assets/img/entropy_vs_flatness.webp" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
